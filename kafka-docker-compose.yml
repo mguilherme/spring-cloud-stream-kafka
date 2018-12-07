@@ -1,0 +1,56 @@
+#docker-compose -f kafka-docker-compose.yml -p kafka up
+
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.70.174
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: 'test:1:1'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      #KAFKA_DELETE_TOPIC_ENABLE: 'false'
+
+  kafka-rest:
+    image: nodefluent/kafka-rest
+    ports:
+      - 8082:8082
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      KAFKA_REST_DEBUG: "all"
+      KAFKA_REST_HTTP_PORT: 8082
+      KAFKA_REST_CONSUMER_METADATA_BROKER_LIST: "kafka:9092"
+      KAFKA_REST_PRODUCER_METADATA_BROKER_LIST: "kafka:9092"
+
+  kafka-topics-ui:
+    image: landoop/kafka-topics-ui
+    ports:
+      - 8000:8000
+    depends_on:
+      - kafka-rest
+    environment:
+      KAFKA_REST_PROXY_URL: "http://kafka-rest:8082"
+      PROXY: "true"
+
+  kafka-monitor:
+    image: lysakaleksey/kafdrop:latest
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      ZOOKEEPER_CONNECT: zookeeper:2181
+      SERVER_PORT: 9000
+    ports:
+    - 9090:9000
+  

@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: producer
+
+  cloud:
+    stream:
+
+      bindings:
+        output:
+          destination: test
+          binder: kafka1
+          contentType: application/json
+
+      binders:
+        kafka1:
+          type: kafka
+          environment:
+            spring:
+              kafka:
+                brokers: localhost:9092

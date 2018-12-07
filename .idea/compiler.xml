@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eu.man.cloud.spring.consumer.consumer.main" target="11" />
+      <module name="eu.man.cloud.spring.consumer.consumer.test" target="11" />
+      <module name="eu.man.cloud.spring.producer.main" target="11" />
+      <module name="eu.man.cloud.spring.producer.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
